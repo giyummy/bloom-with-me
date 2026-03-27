@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Will You Go On a Date With Me?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue-deep:  #3a6fd8;
+      --blue-mid:   #6a9fe8;
+      --blue-light: #b8d4f8;
+      --blue-pale:  #deeeff;
+      --cream:      #f4f9ff;
+      --text-dark:  #1c2d4f;
+      --text-mid:   #4a6080;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--cream);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 20%, #c5deffaa 0%, transparent 60%),
+        radial-gradient(ellipse 60% 70% at 90% 80%, #b6d4faaa 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50% 50%, #e8f3ff 0%, #f4f9ff 100%);
+      z-index: -2;
+      animation: bgshift 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes bgshift {
+      0%   { filter: hue-rotate(0deg)  brightness(1);    }
+      100% { filter: hue-rotate(10deg) brightness(1.03); }
+    }
+
+    .daisies-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .floating-daisy {
+      position: absolute;
+      opacity: 0;
+      animation: floatUp linear infinite;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0;   }
+      5%   { opacity: 0.2; }
+      95%  { opacity: 0.2; }
+      100% { transform: translateY(-15vh) rotate(360deg); opacity: 0;   }
+    }
+
+    .sparkle {
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0;
+      animation: twinkle ease-in-out infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0;    transform: scale(0.5); }
+      50%       { opacity: 0.45; transform: scale(1.3); }
+    }
+
+    .corner-daisy {
+      position: fixed;
+      opacity: 0.22;
+      pointer-events: none;
+      animation: sway 4s ease-in-out infinite alternate;
+    }
+    .corner-daisy.tl { top: 14px;    left: 14px;   animation-delay: 0s;   }
+    .corner-daisy.tr { top: 14px;    right: 14px;  animation-delay: 0.7s; }
+    .corner-daisy.bl { bottom: 14px; left: 14px;   animation-delay: 1.3s; }
+    .corner-daisy.br { bottom: 14px; right: 14px;  animation-delay: 2s;   }
+
+    @keyframes sway {
+      from { transform: rotate(-10deg) scale(0.93); }
+      to   { transform: rotate(10deg)  scale(1.07); }
+    }
+
+    .page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 36px 20px 80px;
+    }
+
+    .top-decor {
+      text-align: center;
+      margin-bottom: 14px;
+      animation: popIn 0.6s cubic-bezier(.34,1.56,.64,1) both;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.4); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .card {
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(20px);
+      border-radius: 34px;
+      border: 2px solid rgba(106,159,232,0.28);
+      box-shadow:
+        0 10px 40px rgba(58,111,216,0.11),
+        0 2px 8px  rgba(58,111,216,0.07),
+        inset 0 1px 0 rgba(255,255,255,0.95);
+      padding: 48px 40px 40px;
+      animation: slideUp 0.7s cubic-bezier(.34,1.4,.64,1) 0.1s both;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header-icon {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .header-icon svg {
+      animation: wobble 2.8s ease-in-out infinite;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-4deg) scale(1);    }
+      50%       { transform: rotate(4deg)  scale(1.07); }
+    }
+
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.6rem);
+      font-weight: 600;
+      color: var(--blue-deep);
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .header h1 em {
+      font-style: italic;
+      color: var(--blue-mid);
+    }
+
+    .header p {
+      font-size: 1.03rem;
+      color: var(--text-mid);
+      max-width: 460px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .daisy-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 26px 0;
+      opacity: 0.65;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--blue-light), transparent);
+    }
+
+    .form-wrapper {
+      border-radius: 22px;
+      overflow: hidden;
+      border: 2px solid var(--blue-light);
+      box-shadow:
+        0 4px 24px rgba(58,111,216,0.10),
+        inset 0 0 0 1px rgba(255,255,255,0.7);
+    }
+
+    .form-wrapper iframe {
+      width: 100%;
+      height: 860px;
+      border: none;
+      display: block;
+      background: white;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 28px;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      animation: slideUp 0.8s cubic-bezier(.34,1.4,.64,1) 0.4s both;
+    }
+
+    .footer-icon {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      animation: heartbeat 1.6s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1);    }
+      50%       { transform: scale(1.12); }
+    }
+
+    @media (max-width: 540px) {
+      .card { padding: 26px 16px 26px; border-radius: 24px; }
+      .form-wrapper iframe { height: 960px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="corner-daisy tl" id="cd-tl"></div>
+<div class="corner-daisy tr" id="cd-tr"></div>
+<div class="corner-daisy bl" id="cd-bl"></div>
+<div class="corner-daisy br" id="cd-br"></div>
+<div class="daisies-bg"     id="daisiesBg"></div>
+<div id="sparkles"></div>
+
+<div class="page">
+  <div class="top-decor"  id="topDecor"></div>
+
+  <div class="card">
+    <div class="header">
+      <div class="header-icon" id="headerIcon"></div>
+      <h1>Will you go on a<br/><em>date with me?</em></h1>
+      <p>I made this little form just for you, because you deserve something as sweet as you are. Pick your favorites and let's make it happen ❀</p>
+    </div>
+
+    <div class="daisy-divider">
+      <div class="divider-line"></div>
+      <span id="divDaisy1"></span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="form-wrapper">
+      <iframe
+        src="https://docs.google.com/forms/d/e/1FAIpQLScCK17mE9e8WqiNNnf6ZBGDcgzuglnqvXNMYunmZ2y2sRoRQg/viewform?embedded=true"
+        width="640" height="826"
+        frameborder="0" marginheight="0" marginwidth="0">
+        Loading…
+      </iframe>
+    </div>
+
+    <div class="daisy-divider" style="margin-bottom:0">
+      <div class="divider-line"></div>
+      <span id="divDaisy2"></span>
+      <div class="divider-line"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-icon" id="footerIcon"></div>
+    made with lots of love, just for you ❀
+  </div>
+</div>
+
+<script>
+  /* ── SVG daisy factory ──────────────────────────────────────────
+     size        : overall px
+     petalColor  : fill for petals
+     centerColor : fill for center circle
+     numPetals   : 6 or 8
+     rotOffset   : degrees to rotate the whole flower
+  ────────────────────────────────────────────────────────────── */
+  function daisy(size, petalColor, centerColor, numPetals = 8, rotOffset = 0) {
+    const half   = size / 2;
+    const orbit  = half * 0.40;   // distance from centre to petal centre
+    const pw     = half * 0.16;   // petal semi-width
+    const ph     = half * 0.30;   // petal semi-height
+    const cr     = half * 0.24;   // centre circle radius
+    const step   = 360 / numPetals;
+
+    let petalsSVG = '';
+    for (let i = 0; i < numPetals; i++) {
+      const angle = i * step + rotOffset;
+      const op    = i % 2 === 0 ? 0.92 : 0.78;
+      petalsSVG  += `<ellipse cx="0" cy="${-orbit}" rx="${pw}" ry="${ph}"
+                       fill="${petalColor}" transform="rotate(${angle})" opacity="${op}"/>`;
+    }
+
+    return `<svg width="${size}" height="${size}"
+               viewBox="${-half} ${-half} ${size} ${size}"
+               fill="none" xmlns="http://www.w3.org/2000/svg">
+      ${petalsSVG}
+      <circle cx="0" cy="0" r="${cr}"     fill="${centerColor}"/>
+      <circle cx="${-cr*0.35}" cy="${-cr*0.35}" r="${cr*0.38}" fill="white" opacity="0.32"/>
+    </svg>`;
+  }
+
+  /* ── cross / star divider element ── */
+  function starDot(size, color) {
+    const h = size / 2;
+    return `<svg width="${size}" height="${size}" viewBox="${-h} ${-h} ${size} ${size}" fill="none">
+      <circle cx="0" cy="0" r="${h*0.3}" fill="${color}"/>
+      <line x1="0" y1="${-h}" x2="0" y2="${h}" stroke="${color}" stroke-width="1.4"/>
+      <line x1="${-h}" y1="0" x2="${h}" y2="0" stroke="${color}" stroke-width="1.4"/>
+      <line x1="${-h*0.7}" y1="${-h*0.7}" x2="${h*0.7}" y2="${h*0.7}" stroke="${color}" stroke-width="1" opacity="0.5"/>
+      <line x1="${h*0.7}"  y1="${-h*0.7}" x2="${-h*0.7}" y2="${h*0.7}" stroke="${color}" stroke-width="1" opacity="0.5"/>
+    </svg>`;
+  }
+
+  /* ── inject corner daisies ── */
+  document.getElementById('cd-tl').innerHTML = daisy(68, '#6a9fe8', '#3a6fd8', 8,  0);
+  document.getElementById('cd-tr').innerHTML = daisy(60, '#3a6fd8', '#6a9fe8', 8, 22);
+  document.getElementById('cd-bl').innerHTML = daisy(54, '#6a9fe8', '#3a6fd8', 6,-15);
+  document.getElementById('cd-br').innerHTML = daisy(72, '#3a6fd8', '#6a9fe8', 8, 35);
+
+  /* ── top decorative row ── */
+  const topDecorEl = document.getElementById('topDecor');
+  topDecorEl.innerHTML =
+    daisy(32, '#6a9fe8','#3a6fd8', 8,  0) +
+    starDot(14,'#b8d4f8') +
+    daisy(40, '#3a6fd8','#6a9fe8', 8, 22) +
+    starDot(14,'#b8d4f8') +
+    daisy(32, '#6a9fe8','#3a6fd8', 8,  0);
+
+  /* ── header icon ── */
+  document.getElementById('headerIcon').innerHTML = daisy(62,'#6a9fe8','#3a6fd8',8,0);
+
+  /* ── dividers ── */
+  document.getElementById('divDaisy1').innerHTML = daisy(26,'#6a9fe8','#3a6fd8',8,15);
+  document.getElementById('divDaisy2').innerHTML = daisy(26,'#3a6fd8','#6a9fe8',8, 0);
+
+  /* ── footer icons ── */
+  document.getElementById('footerIcon').innerHTML =
+    daisy(22,'#b8d4f8','#6a9fe8',8, 0) +
+    daisy(30,'#6a9fe8','#3a6fd8',8, 0) +
+    daisy(22,'#b8d4f8','#6a9fe8',8, 0);
+
+  /* ── floating background daisies ── */
+  const bgEl   = document.getElementById('daisiesBg');
+  const pairs  = [
+    ['#6a9fe8','#3a6fd8'], ['#3a6fd8','#6a9fe8'],
+    ['#b8d4f8','#6a9fe8'], ['#6a9fe8','#b8d4f8'],
+  ];
+  for (let i = 0; i < 22; i++) {
+    const wrap      = document.createElement('div');
+    wrap.className  = 'floating-daisy';
+    const [pc, cc]  = pairs[i % pairs.length];
+    const sz        = Math.random() * 22 + 14;
+    const np        = Math.random() > 0.45 ? 8 : 6;
+    const rot       = Math.random() * 360;
+    wrap.innerHTML  = daisy(sz, pc, cc, np, rot);
+    wrap.style.cssText = `
+      left: ${Math.random() * 100}%;
+      animation-duration: ${(Math.random() * 14 + 10).toFixed(1)}s;
+      animation-delay:    ${(Math.random() * 14).toFixed(1)}s;
+    `;
+    bgEl.appendChild(wrap);
+  }
+
+  /* ── sparkle dots ── */
+  const spEl     = document.getElementById('sparkles');
+  const spColors = ['#6a9fe8','#3a6fd8','#b8d4f8','#deeeff'];
+  for (let i = 0; i < 30; i++) {
+    const dot       = document.createElement('div');
+    dot.className   = 'sparkle';
+    const c         = spColors[i % spColors.length];
+    const s         = Math.random() * 5 + 3;
+    dot.style.cssText = `
+      left: ${Math.random()*100}%; top: ${Math.random()*100}%;
+      width: ${s}px; height: ${s}px; background: ${c};
+      animation-duration: ${(Math.random()*3+2).toFixed(1)}s;
+      animation-delay:    ${(Math.random()*5).toFixed(1)}s;
+    `;
+    spEl.appendChild(dot);
+  }
+</script>
+</body>
+</html>
